@@ -1,0 +1,57 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Blocks List</h1>
+  <!-- It won't show if there is no student data -->
+  <a routerLink="/register-block" class="btn btn-success" *ngIf="hideWhenNoBlock">
+    <i class="fas fa-plus custom-fa-plus"></i>
+    Add New Block
+  </a>
+</div>
+
+<div class="pricing-header mx-auto">
+
+  <!-- Preloader shows before the data loads-->
+  <div class="no-data text-center" *ngIf="preLoader">
+    <img src="assets/preloader.gif" class="preloader-icon" alt="No block">
+  </div>
+
+  <!-- No data shows when their is no student data available -->
+  <div class="no-data text-center" *ngIf="noData">
+    <img src="assets/nothing.svg" class="nodata-msg" alt="nothing">
+    <p class="nodata-msg">No block added yet!</p>
+    <a routerLink="/register-block" class="btn btn-success">
+      <i class="fas fa-plus custom-fa-plus"></i>
+      Add Block
+    </a>
+  </div>
+
+  <!-- Showing students data -->
+  <div class="table-responsive" *ngIf="hideWhenNoBlock">
+    <table class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg">
+      <thead>
+        <tr>
+          <th scope="col">Block Id</th>
+          <th scope="col">Block name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Mobile number</th>
+          <th class="text-center" scope="col">Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- *ngFor loop iterates over Block array and fetch the block's data -->
+        <!-- paginate pipe will add pagination in block's list, it won't show if items are less then 7 -->
+        <tr *ngFor="let block of Block| paginate: { itemsPerPage: 7, currentPage: p }; let i = index;">
+          <th scope="row">{{block.$key}}</th>
+          <td>{{block.firstName}} {{block.lastName}}</td>
+          <td>{{block.email}}</td>
+          <td>{{block.mobileNumber}}</td>
+          <td class="text-center action-block">
+            <!-- routerLink="/edit-block/{{block.$key}}" is refered to { path: 'edit-block/:id', component: EditStudentComponent } in app-routing.moudles.ts -->
+            <i class="far fa-edit" routerLink="/edit-block/{{block.$key}}"></i>
+            <i class="far fa-trash-alt" (click)="deleteBlock(block)"></i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Pagination -->
+  <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true"></pagination-controls>
+</div>
